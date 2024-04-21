@@ -35,5 +35,6 @@
 <div class="mx-auto mt-20 text-xl font-extrabold text-center">{{ $message }}</div>
 @endif
 
+
 </x-layout>
 
