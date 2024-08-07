@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 
-use auth;
-
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use function Laravel\Prompts\confirm;
@@ -60,7 +59,16 @@ class UserController extends Controller
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect('/')->with('message', 'You are logged in.');
+            $id = auth()->user()->id;
+            $check = DB::table('addresses')->where('userid', $id)->exists();
+
+            if ($check) {
+                return redirect('/')->with('message', 'You are logged in.');
+            } else {
+                return redirect('/address');
+            }
+
+            //return redirect('/')->with('message', 'You are logged in.');
         }
 
         return back()->withErrors(['email' => 'Invalid credentials'])->withInput($request->only('email'));

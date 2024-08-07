@@ -4,22 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class productController extends Controller
 {
     public function index()
     {
+        $address_status = null;
 
-        /* $category = $request->input('category');
-        $products = $category ? Product::where('category', $category)->get() : [];
-
-        //
-        return view('shop',  [
-            'product' => product::latest()->get()
-        ], compact('products'));*/
+        if (auth::check()) {
+            $address_status = auth()->user()->addresses()->get();
+        }
 
         return view('today.index', [
-            'product' => product::latest()->get()
+            'product' => product::latest()->get(),
+            'address' => $address_status
         ],);
     }
 
@@ -54,7 +53,7 @@ class productController extends Controller
 
         product::create($formField);
 
-        return redirect('/')->with('message', 'Product uploaded successfully');
+        return redirect('/Admin/ProductsUpdate')->with('message', 'Product uploaded successfully');
     }
 
 

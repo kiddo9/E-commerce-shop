@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\address;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+
 
 class addressController extends Controller
 {
@@ -21,13 +24,36 @@ class addressController extends Controller
             'pLOCATION' => 'required'
         ]);
 
-        address::create($deliveryAddressFelid);
+        $id = auth()->id();
+        $check = DB::table('addresses')->where('userid', $id)->exists();
 
-        return redirect('/pay')->with('message', 'Delivery address Updated');
+        if ($check) {
+
+            return redirect('/address')->with('message', 'you have an address');
+        } else {
+            $deliveryAddressFelid['userid'] = auth()->id();
+
+            address::create($deliveryAddressFelid);
+
+            return redirect('/')->with('message', 'Delivery address Updated');
+        }
     }
 
     public function pay()
     {
         return view('pay');
+    }
+
+    public function ShowAddress()
+    {
+        return view('today.profile', ['address' => auth()->user()->addresses()->get()]);
+    }
+
+
+    public function listAddresses()
+    {
+        return view('Admin.Staff', [
+            'Addresses' => address::latest()->get()
+        ]);
     }
 }

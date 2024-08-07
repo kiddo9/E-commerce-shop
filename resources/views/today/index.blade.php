@@ -2,6 +2,23 @@
 
     <x-nav />
 
+
+         @if(isset($address))
+            @foreach ($address as $add )
+            @auth
+            <p id="address" data-address-id={{ $add->id }}></p>
+            @else
+            <script>
+                window.location.href = "/address";
+            </script>
+            <p id="address" data-address-id="null">Please Add your address before placing Order</p>
+            @endauth
+            @endforeach
+        @endif
+
+
+
+
 <div class="p-4 sm:p-2 ">
     <div class="relative h-full p-6 bg-gray-200 lg:h-[46rem] lg:ml-5 lg:mt-6 xl:h-[44rem] 2xl:h-[40rem]">
         <ul class="justify-between hidden lg:top-32 lg:flex lg:flex-col lg:absolute lg:gap-20 lg:ml-6 xl:gap-28">
@@ -84,4 +101,10 @@
         </div>
     </section>
 </div>
+
+<script>
+    const Address = document.getElementById('address');
+    const AddressId = Address.getAttribute('data-address-id');
+    sessionStorage.setItem('AddressId', JSON.parse(AddressId));
+</script>
 </x-layout>

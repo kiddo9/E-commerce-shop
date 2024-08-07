@@ -40,13 +40,13 @@
     <nav class="flex">
         <ul class="flex gap-[15px] sm:gap-5 sm:-ml-52">
             @auth
-           <a href="/profile"> <li class="cursor-pointer sm:flex sm:text-3xl"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 sm:w-8 sm:h-8">
+           <a href="/profile"> <li class="cursor-pointer sm:flex sm:text-3xl" id="user-info" data-user-id="{{ auth()->user()->id }}"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 sm:w-8 sm:h-8">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
               </svg>
               </li></a>
 
             @else
-          <a href="/login"><li class="cursor-pointer 2xl:cursor-pointer sm:flex sm:text-xl lg:z-50">LOGIN</li></a>
+          <a href="/login"><li class="cursor-pointer 2xl:cursor-pointer sm:flex sm:text-xl lg:z-50" id="user-info" data-user-id="null">LOGIN</li></a>
           @endauth
            <a href="/search"> <li class="cursor-pointer"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 sm:w-8 sm:h-8">
                 <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -76,7 +76,10 @@
 </div>
 
 <div class="fixed z-50 flex justify-center w-screen py-5 -translate-y-full bg-green-500" id="addcartmessage">
-    <p class="text-xl text-white" id="addedmessage">nidkhnfj ckl</p>
+    <p class="text-xl text-white" id="addedmessage"></p>
+</div>
+
+<div class="fixed z-50 flex justify-center w-screen py-5 text-sm -translate-y-full bg-red-500" id="Errorcartmessage">
 </div>
 
 
@@ -111,9 +114,9 @@
             <p>Sub Total</p><span id="subtotal">--------</span>
         </div>
         @auth
-      <a href="/address">  <button type="submit" class="flex justify-center w-10/12 gap-4 p-3 mx-auto text-xl leading-tight text-white bg-gray-600">CHECKOUT<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+       <button type="submit" class="flex justify-center w-10/12 gap-4 p-3 mx-auto text-xl leading-tight text-white bg-gray-600" onclick="OrderItem()">CHECKOUT<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
-          </svg><span class="text-sm" id="total">$0</span></button></a><br>
+          </svg><span class="text-sm" id="total">$0</span></button><br>
           @else
         <a href="/login">  <button class="flex justify-center w-10/12 gap-4 p-3 mx-auto text-xl leading-tight text-gray-300 bg-gray-100 cursor-not-allowed" title="Please Log in to be able to checkout">CHECKOUT<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
@@ -121,3 +124,45 @@
         @endauth
     </div><br><br><br><br><br><br><br><br><br><br><br>
 </div>
+
+<script>
+    const userInfoElement = document.getElementById('user-info');
+    const userId = userInfoElement.getAttribute('data-user-id');
+    sessionStorage.setItem('userId', JSON.parse(userId));
+</script>
+
+<script>
+      function OrderItem(){
+        var StoredItems = JSON.parse(localStorage.getItem('cartItem'));
+        let total = 0;
+
+        var Addressid = JSON.parse(sessionStorage.getItem('AddressId'));
+
+        if(StoredItems.length === 0){
+            alert("Can't make. order cart is empty");
+            sessionStorage.remove('total');
+        }else if(Addressid === null){
+            window.location.href = "/address";
+        }else{
+
+            fetch('/ordered-placed', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({ arrayData: StoredItems })
+            })
+            .then(response => response.json())
+            .then(data => {
+                //console.log(data);
+                localStorage.clear()
+                window.location.href = '/pay';
+            })
+            .catch((error) => {
+                console.error('Error submitting data:', error);
+            });
+        }
+  }
+
+</script>

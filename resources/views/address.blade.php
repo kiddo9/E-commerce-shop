@@ -9,49 +9,26 @@
             <div class="flex flex-col justify-center p-2">
                 <form method="post" action="/deliveryAddress" class="flex flex-col gap-4">
                     @csrf
-                    <select name="country" value="{{ old('country') }}" class="px-3 py-3 bg-transparent border-b-2 border-gray-600 outline-none">
-                        <option value="Nigeria">Nigeria</option>
-                        <option value="South Africa">South Africa</option>
-                        <option value="Egypt">Egypt</option>
-                        <option value="Ghana">Ghana</option>
-                        <option value="Camerron">Camerron</option>
-                        <option value="Kanya">Kanya</option>
-                    </select>
+                    <input type="text" placeholder="country eg:Nigeria" name="country" value="{{ old('country') }}" class="px-3 py-3 bg-transparent border-b-2 border-gray-600 outline-none">
                     @error('country')
                         <p class="text-sm text-red-500">{{$message }}</p>
                     @enderror
-                    <select name="state" value="{{ old('First_name') }}" class="px-3 py-3 bg-transparent border-b-2 border-gray-600 outline-none">
-                        <option value="Anambra">Anambra</option>
-                        <option value="Ebonyi">Ebonyi</option>
-                        <option value="Enugu">Enugu</option>
-                        <option value="Abia">Abia</option>
-                        <option value="Delta">Delta</option>
-                        <option value="lagos">lagos</option>
-                    </select>
+
+                    <input type="text" placeholder="state eg: anambra"  name="state" value="{{ old('state') }}" class="px-3 py-3 bg-transparent border-b-2 border-gray-600 outline-none">
                     @error('state')
                     <p class="text-sm text-red-500">{{$message }}</p>
-                @enderror
-                <select name="LGA" value="{{ old('First_name') }}" class="px-3 py-3 bg-transparent border-b-2 border-gray-600 outline-none">
-                    <option value="Onitsha NORTH">Onitsha NORTH</option>
-                    <option value="Onitsha south">Onitsha south</option>
-                    <option value="GRA I">GRA I</option>
-                    <option value="GRA II">GRA II</option>
-                    <option value="GRA III">GRA III</option>
-                </select>
+                    @enderror
+
+                    <input type="text" placeholder="LGA"  name="LGA" value="{{ old('LGA') }}" class="px-3 py-3 bg-transparent border-b-2 border-gray-600 outline-none">
                     @error('LGA')
                     <p class="text-sm text-red-500">{{$message }}</p>
-                @enderror
-                <select name="pLOCATION" value="{{ old('First_name') }}" class="px-3 py-3 bg-transparent border-b-2 border-gray-600 outline-none">
-                    <option value="SHOPRITE ONITSHA">SHOPRITE ONITSHA</option>
-                    <option value="ROBIAN STORE">ROBIAN STORE</option>
-                    <option value="Market Place">Market Place</option>
-                    <option value="EveryDay">EveryDay</option>
-                    <option value="5 star">5 star</option>
-                </select>
-                    @error('mobile')
+                    @enderror
+
+                    <input type="text" placeholder="popular location" name="pLOCATION" value="{{ old('pLOCATION') }}" class="px-3 py-3 bg-transparent border-b-2 border-gray-600 outline-none">
+                    @error('pLOCATION')
                     <p class="text-sm text-red-500">{{$message }}</p>
                 @enderror
-                    <button type="submit" class="p-2 transition bg-slate-400 text-md hover:bg-green-500 hover:transition">ORDER</button>
+                    <button type="submit" class="p-2 transition bg-slate-400 text-md hover:bg-green-500 hover:transition">Add</button>
                 </form><br>
             </div>
         </div>

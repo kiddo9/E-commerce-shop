@@ -20,7 +20,7 @@
     <div class="flex flex-col items-center content-center self-center justify-center" data-aos="fade-down" data-aos-duration="2000">
         <h4 class="mt-4 text-left text-md">{{ $product['description'] }}</h4>
     </div>
-    <h5 class="mt-4 text-xl font-bold" data-aos="fade-down" data-aos-duration="2000" data-aos-delay="1800">${{ $product['price'] }}</h5>
+    <h5 class="mt-4 text-xl font-bold">${{ $product['price'] }}</h5>
 </div>
 
  <button class="flex justify-center p-2 mt-4 ml-auto mr-auto w-36 bg-slate-300 hover:bg-green-500 hover:transition hover:delay-100 hover:duration-800 hover:ease-in-out" onclick="AddItem({{ $product['id'] }})"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 sm:w-12 sm:h-12">
